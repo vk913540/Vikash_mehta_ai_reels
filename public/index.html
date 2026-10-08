@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VIKASH MEHTA AI REELS</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: white;
+    }
+
+    .container {
+      max-width: 500px;
+      margin: auto;
+      padding: 24px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #aaa;
+      margin-bottom: 30px;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 130px;
+      box-sizing: border-box;
+      padding: 14px;
+      border-radius: 12px;
+      border: 1px solid #444;
+      background: #222;
+      color: white;
+      font-size: 16px;
+      resize: vertical;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 15px;
+      padding: 15px;
+      border: 0;
+      border-radius: 12px;
+      background: #fff;
+      color: #111;
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    #status {
+      margin-top: 20px;
+      text-align: center;
+      color: #aaa;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>VIKASH MEHTA AI REELS</h1>
+    <div class="subtitle">Create AI-powered reels</div>
+
+    <textarea id="prompt" placeholder="Describe your reel..."></textarea>
+
+    <button onclick="generateReel()">Generate Reel</button>
+
+    <div id="status"></div>
+
+    <button id="subscribeBtn" onclick="subscribe()" style="margin-top:15px;">
+      Subscribe
+    </button>
+
+    <div id="adBox" style="margin-top:25px;padding:15px;border:1px solid #ddd;border-radius:12px;text-align:center;">
+      Advertisement
+    </div>
+
+    <video id="reelVideo" controls playsinline
+      style="display:none;width:100%;max-width:720px;margin-top:20px;border-radius:12px;">
+    </video>
+  </div>
+
+  <script>
+    async function subscribe() {
+      const status = document.getElementById("status");
+
+      try {
+        const response = await fetch("/v1/subscribe", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            userId: "test-user"
+          })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          status.textContent = data.error || "Subscription failed.";
+          return;
+        }
+
+        status.textContent = data.message;
+      } catch (error) {
+        status.textContent = "Server connection failed.";
+      }
+    }
+
+    async function generateReel() {
+      const prompt = document.getElementById("prompt").value.trim();
+      const status = document.getElementById("status");
+
+      if (!prompt) {
+        status.textContent = "Please enter a reel prompt.";
+        return;
+      }
+
+      status.textContent = "Sending request...";
+
+      try {
+        const response = await fetch("/v1/reels/generate", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            userId: "test-user",
+            prompt: prompt
+          })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          status.textContent = data.message || data.error || "Generation failed.";
+          return;
+        }
+
+        if (data.videoUrl) {
+          const video = document.getElementById("reelVideo");
+          video.src = data.videoUrl;
+          video.style.display = "block";
+          video.load();
+        }
+
+        status.textContent = "Reel task submitted: " + data.message;
+      } catch (error) {
+        status.textContent = "Server connection failed.";
+      }
+    }
+  </script>
+</body>
+</html>

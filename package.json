@@ -1,8 +1,15 @@
 {
-  "name":"vikash-mehta-ai-reels-backend",
-  "version":"1.0.0",
-  "private":true,
-  "type":"module",
-  "scripts":{"start":"node server.js"},
-  "dependencies":{"express":"^5.1.0","cors":"^2.8.5"}
+  "name": "vikash-mehta-ai-reels-backend",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "@runwayml/sdk": "^4.20.1",
+    "cors": "^2.8.5",
+    "dotenv": "^18.0.5",
+    "express": "^5.1.0"
+  }
 }
