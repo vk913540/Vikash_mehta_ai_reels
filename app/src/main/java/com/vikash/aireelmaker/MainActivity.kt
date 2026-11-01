@@ -403,7 +403,7 @@ fun ReelMakerScreen() {
                         )
 
                         reelHistory.asReversed().forEachIndexed { index, item ->
-                            val parts = item.split("||", limit = 2)
+                            val parts = item.split("||", limit = 3)
                             val title = parts.getOrNull(0) ?: "Generated Reel"
 
                             Card(
@@ -450,6 +450,14 @@ fun ReelMakerScreen() {
                                             fontSize = 12.sp,
                                             color = Color.LightGray
                                         )
+                                        parts.getOrNull(2)?.let { dateTime ->
+                                            Spacer(Modifier.height(2.dp))
+                                            Text(
+                                                dateTime,
+                                                fontSize = 11.sp,
+                                                color = Color.Gray
+                                            )
+                                        }
                                     }
 
                                     IconButton(
